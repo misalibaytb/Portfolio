@@ -1,6 +1,16 @@
 <?php
-    const API_KEY = "2d5880076e3ef05167f3ab67c397854b";
-    const SHARED_SECRET = "99e48b2fbb3a8b6fba6326332edf493e";
+    $envFile = __DIR__ . '/.env';
+    if (file_exists($envFile)) {
+        $envVariables = parse_ini_file($envFile);
+        if (isset($envVariables['API_KEY']) && isset($envVariables['SHARED_SECRET'])) {
+            define('API_KEY', $envVariables['API_KEY']);
+            define('SHARED_SECRET', $envVariables['SHARED_SECRET']);
+        } else {
+            die(json_encode(["error" => "Missing required environment variables in .env file."]));
+        }
+    } else {
+        die(json_encode(["error" => ".env file not found."]));
+    }
     const CACHE_FILE = __DIR__ . '/lastfm_cache.json';
     const CACHE_DURATION = 30; // seconds
 
