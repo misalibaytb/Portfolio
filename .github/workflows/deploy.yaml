@@ -23,10 +23,16 @@ jobs:
               run: npm run build
             - name: Save SSH private key to file
               run: |
+                - if [ -n "${{ secrets.SERVER_PASSWORD }}" ]; then
+                  echo "Skipping SSH key setup as password is provided."
+                else
+                echo "Setting up SSH key..."`
                 - mkdir -p ~/.ssh
                 - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
                 - chmod 700 ~/.ssh
                 - chmod 600 ~/.ssh/id_rsa
+                - ssh-keyscan -H "${{ secrets.SERVER_IP }}" >> ~/.ssh/known_hosts
+                fi
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
