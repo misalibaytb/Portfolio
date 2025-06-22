@@ -24,7 +24,7 @@
         exit;
     }
 
-    $url = "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=misaliba&api_key=" . API_KEY . "&format=json&limit=1";
+    $url = "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=misaliba&api_key=" . API_KEY . "&format=json&limit=100";
 
     $response = file_get_contents($url);
 
