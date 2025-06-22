@@ -30,5 +30,9 @@ jobs:
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
-                scp -r -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
-                rm ssh_key
+                if [ -n "${{ secrets.SERVER_PASSWORD }}" ]; then
+                  sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -r -o StrictHostKeyChecking=no -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
+                else
+                  scp -r -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
+                fi
+                rm ~/.ssh/id_rsa
