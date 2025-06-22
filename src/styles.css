@@ -1,0 +1,327 @@
+/* General Body and Background */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    /* Prevent scrollbars */
+}
+
+.desktop-background {
+    /* Dark, subtle gradient */
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* Align dock to the bottom */
+    align-items: center;
+    position: relative;
+    /* For absolute positioning of windows */
+}
+
+/* Window Styles */
+.window {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: width 0.3s ease, height 0.3s ease, transform 0.1s ease-out;
+    /* Smooth transitions for maximize/drag */
+    min-width: 250px;
+    min-height: 150px;
+}
+
+.window.maximized {
+    border-radius: 0;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 100px) !important;
+    /* Account for dock */
+    transform: none !important;
+    /* Reset transform when maximized */
+}
+
+.window-header {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    cursor: grab;
+    /* Indicates draggable */
+    -webkit-app-region: drag;
+    /* For custom title bar dragging in electron-like environments */
+}
+
+.window-header:active {
+    cursor: grabbing;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.window-control-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.2s ease;
+}
+
+.close-btn {
+    background-color: #ff5f56;
+}
+
+.minimize-btn {
+    background-color: #ffbd2e;
+}
+
+.maximize-btn {
+    background-color: #27c93f;
+}
+
+.window-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    user-select: none;
+    /* Prevent text selection during drag */
+}
+
+.app-content {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Dock Styles */
+.dock {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background */
+    backdrop-filter: blur(15px);
+    /* Stronger frosted glass effect */
+    border-radius: 28px;
+    /* More rounded for the dock */
+    padding: 12px 25px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    /* Space from bottom edge */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    animation: translatein 1s ease-in-out forwards;
+    /* Apply animation */
+    transform: translateY(-10%);
+    /* Default state after animation */
+}
+
+.dock-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.dock-icon {
+    width: 55px;
+    height: 55px;
+    background-color: rgba(255, 255, 255, 0.25);
+    /* Slightly lighter for icons */
+    border-radius: 12px;
+    /* Rounded icons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Springy effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dock-icon:hover {
+    transform: translateY(-12px) scale(1.1);
+    /* Lift and enlarge on hover */
+}
+
+.running-indicator {
+    width: 6px;
+    height: 6px;
+    background-color: #4CAF50;
+    /* Green indicator */
+    border-radius: 50%;
+    margin-top: 6px;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Animations */
+@keyframes translatein {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+        scale: 0.8;
+    }
+
+    75% {
+        transform: translateY(-25%);
+        opacity: 1;
+        scale: 1.05;
+    }
+
+    100% {
+        transform: translateY(-10%);
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .window {
+        width: 95vw !important;
+        left: 2.5vw !important;
+        top: 2.5vh !important;
+        height: auto !important;
+        max-height: 85vh;
+    }
+
+    .dock {
+        padding: 8px 15px;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .dock-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .app-content {
+        padding: 15px;
+    }
+
+    .app-title {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+}
+
+/* Specific App Content Styles */
+.app-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: #34495e;
+}
+
+.lastfm-track-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+    background-color: #f8f8f8;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.album-art {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.song-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+.artist-name {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.album-name {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.recent-tracks-list {
+    list-style: disc;
+    padding-left: 25px;
+    color: #555;
+}
+
+.recent-tracks-list li {
+    margin-bottom: 5px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    background-color: #f8f8f8;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.project-description {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.terminal-output {
+    background-color: #222;
+    color: #0f0;
+    /* Green text for terminal */
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+    min-height: 150px;
+    white-space: pre-wrap;
+    /* Preserve whitespace and wrap text */
+    overflow-x: auto;
+}
