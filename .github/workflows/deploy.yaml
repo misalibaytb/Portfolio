@@ -31,14 +31,3 @@ jobs:
                 echo "Deploying to server..."
                 scp -r -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
                 rm ~/.ssh/id_rsa
-
-
-                — nee: Get SSH Key and set pertissions
-# run: I
-# "dir —p &/.ssh
-# echo > ••/.ssh/id-rsa Chmd 6ee
-# — nee: Deploy using SCP
-# run: scp -o —i •./.ssh/id_rsa —r ./dist/•
-# ret .
-# SH
-# : •./node—app
