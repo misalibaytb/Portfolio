@@ -1,4 +1,5 @@
 <?php
+    echo "kktko";
     $envFile = __DIR__ . '/.env';
     if (file_exists($envFile)) {
         $envVariables = parse_ini_file($envFile);
