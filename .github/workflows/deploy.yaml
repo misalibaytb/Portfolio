@@ -22,7 +22,9 @@ jobs:
             - name: Build project
               run: npm run build
             - name: Save SSH private key to file
-              run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key && chmod 600 ssh_key
+              run: |
+                printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+                chmod 600 ssh_key
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
