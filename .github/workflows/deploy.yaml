@@ -21,12 +21,12 @@ jobs:
               run: npm install
             - name: Build project
               run: npm run build
-            - name: Check key format
-              run: head -n 1 ssh_key && tail -n 1 ssh_key
             - name: Save SSH private key to file
               run: |
                 printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
                 chmod 600 ssh_key
+            - name: Check key format
+              run: head -n 1 ssh_key && tail -n 1 ssh_key
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
