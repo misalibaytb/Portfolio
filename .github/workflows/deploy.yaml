@@ -1,0 +1,28 @@
+name: Deploy Vite App
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            
+            - name: Install node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '18'
+            - name: Install dependencies
+              run: npm install
+            - name: Build project
+              run: npm run build
+            - name: Deploy to server
+              run: |
+                echo "Deploying to server..."
+                ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} -p ${{ secrets.SERVER_PORT || 22 }} ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "rm -rf /www/*"
+                scp -r -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
