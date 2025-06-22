@@ -2,9 +2,10 @@
     $envFile = __DIR__ . '/.env';
     if (file_exists($envFile)) {
         $envVariables = parse_ini_file($envFile);
-        if (isset($envVariables['API_KEY']) && isset($envVariables['SHARED_SECRET'])) {
+        if (isset($envVariables['API_KEY']) && isset($envVariables['SHARED_SECRET']) && isset($envVariables['USERNAME'])) {
             define('API_KEY', $envVariables['API_KEY']);
             define('SHARED_SECRET', $envVariables['SHARED_SECRET']);
+            define('USERNAME', $envVariables['USERNAME']);
         } else {
             die(json_encode(["error" => "Missing required environment variables in .env file."]));
         }
@@ -24,7 +25,7 @@
         exit;
     }
 
-    $url = "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=misaliba&api_key=" . API_KEY . "&format=json&limit=100";
+    $url = "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=" . USERNAME . "&api_key=" . API_KEY . "&format=json&limit=100";
 
     $response = file_get_contents($url);
 
