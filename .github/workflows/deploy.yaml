@@ -23,10 +23,12 @@ jobs:
               run: npm run build
             - name: Save SSH private key to file
               run: |
-                printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
-                chmod 600 ssh_key
+                - mkdir -p ~/.ssh
+                - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+                - chmod 700 ~/.ssh
+                - chmod 600 ~/.ssh/id_rsa
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
-                scp -r -o StrictHostKeyChecking=no -i ssh_key -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
+                scp -r -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
                 rm ssh_key
