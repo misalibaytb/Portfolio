@@ -21,8 +21,10 @@ jobs:
               run: npm install
             - name: Build project
               run: npm run build
+            - name: Save SSH private key to file
+              run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key && chmod 600 ssh_key
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
-                ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} -p ${{ secrets.SERVER_PORT || 22 }} ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "rm -rf /www/*"
-                scp -r -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
+                scp -r -o StrictHostKeyChecking=no -i ssh_key -P ${{ secrets.SERVER_PORT || 22 }} dist/* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/www
+                rm ssh_key
